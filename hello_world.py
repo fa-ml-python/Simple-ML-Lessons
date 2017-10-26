@@ -1,6 +1,6 @@
 import pandas as pd
 import csv
-import pylab as pl
+import matplotlib.pyplot as pl
 
 f = open("SBER_101001_171001.txt")
 reader = csv.reader(f)
@@ -12,5 +12,18 @@ for line in reader:
 
 sber_df = pd.read_csv("SBER_101001_171001.txt")
 
-# pl.plot(sber_df["<CLOSE>"])
-pl.plot(sber_df["<VOL>"])
+fig, ax1 = pl.subplots()
+ax2 = ax1.twinx()
+
+ax1.plot(sber_df["<CLOSE>"], color="red")
+ax2.plot(sber_df["<VOL>"])
+
+pl.show()
+
+
+
+
+
+
+
+
