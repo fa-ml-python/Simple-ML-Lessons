@@ -18,6 +18,7 @@
 
 ### Литература ###
 1. Л. П. Коэльо. Построение систем машинного обучения на языке Python
+1. [Репозиторий с кодом в поддержку книги](https://github.com/luispedro/BuildingMachineLearningSystemsWithPython)
 
 ### Подборки материалов ###
 1. [Awesome python](https://github.com/vinta/awesome-python)
