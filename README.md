@@ -7,7 +7,6 @@
 ### Программное обеспечение и экосистема ###
 1. [Дистрибутив Anaconda](https://www.anaconda.com/distribution/)
 1. [Десктопный клиент для работы с GitHub](https://desktop.github.com/)
-
 1. [Нативный Git-клиент](https://git-scm.com/downloads)
 
 ### Справочные материалы про Git ###
