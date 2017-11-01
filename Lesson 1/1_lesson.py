@@ -12,5 +12,11 @@ y = data[:,1]
 """ Обнаруживаем и удаляем отсутствующие данные """
 #sp.sum(sp.isnan(y))
 #Out[37]: 8
-х = x[-sp.isnan(y)]
-у = y[-sp.isnan(y)]
+х = x[~sp.isnan(y)]
+у = y[~sp.isnan(y)]
+
+
+import matplotlib.pyplot as plt
+
+plt.scatter(x, y, s=10)
+plt.show()
