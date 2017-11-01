@@ -33,3 +33,4 @@
 1. matplotlib
 1. Pandas
 1. [Bokeh](http://bokeh.pydata.org/en/latest/)
+1. [Seaborn](http://seaborn.pydata.org/index.html)
