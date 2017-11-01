@@ -1,7 +1,7 @@
 import scipy as sp
 
 """ Загружаем данные из файла """
-data = sp.genfromtxt("web_traffic.tsv", delimiter="\t")
+data = sp.genfromtxt("data/web_traffic.tsv", delimiter="\t")
 #data[:10]
 #data.shape
 
