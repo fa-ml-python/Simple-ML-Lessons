@@ -53,42 +53,49 @@ plt.show()
 """ Модель парной квадратичной регрессии """
 
 reg = sp.polyfit(x, y, deg=2)
-f1 = sp.poly1d(reg)
-print(reg, error(f1, x, y))
+f2 = sp.poly1d(reg)
+print(reg, error(f2, x, y))
 fx = sp.linspace(0, x[-1], 1000)
 plt.scatter(x, y, s=10)
-plt.plot(fx, f1(fx), linewidth=4, color="red")
+plt.plot(fx, f2(fx), linewidth=4, color="red")
 plt.show()
 
 
 """ Регрессия 3 степени """
 
 reg = sp.polyfit(x, y, deg=3)
-f1 = sp.poly1d(reg)
-print(reg, error(f1, x, y))
+f3 = sp.poly1d(reg)
+print(reg, error(f3, x, y))
 fx = sp.linspace(0, x[-1], 1000)
 plt.scatter(x, y, s=10)
-plt.plot(fx, f1(fx), linewidth=4, color="red")
+plt.plot(fx, f3(fx), linewidth=4, color="red")
 plt.show()
 
 
 """ Регрессия 10 степени """
 
 reg = sp.polyfit(x, y, deg=10)
-f1 = sp.poly1d(reg)
-print(error(f1, x, y))
+f10 = sp.poly1d(reg)
+print(error(f10, x, y))
 fx = sp.linspace(0, x[-1], 1000)
 plt.scatter(x, y, s=10)
-plt.plot(fx, f1(fx), linewidth=4, color="red")
+plt.plot(fx, f10(fx), linewidth=4, color="red")
 plt.show()
 
 
 """ Регрессия 100 степени """
 
 reg = sp.polyfit(x, y, deg=100)
-f1 = sp.poly1d(reg)
-print(error(f1, x, y))
+f100 = sp.poly1d(reg)
+print(error(f100, x, y))
 fx = sp.linspace(0, x[-1], 1000)
 plt.scatter(x, y, s=10)
-plt.plot(fx, f1(fx), linewidth=4, color="red")
+plt.plot(fx, f100(fx), linewidth=4, color="red")
 plt.show()
+
+
+""" Строим регрессию используя вспомогательную функцию """
+
+from gists import plot_models
+
+plot_models(x, y, [f1], "test")
