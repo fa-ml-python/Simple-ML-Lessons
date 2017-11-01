@@ -32,3 +32,4 @@
 1. sci-kit learn
 1. matplotlib
 1. Pandas
+1. [Bokeh](http://bokeh.pydata.org/en/latest/)
