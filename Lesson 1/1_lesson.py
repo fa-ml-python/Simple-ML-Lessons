@@ -20,3 +20,10 @@ import matplotlib.pyplot as plt
 
 plt.scatter(x, y, s=10)
 plt.show()
+
+
+import bokeh.plotting as bok
+
+p = bok.figure(plot_width=800, plot_height=600)
+p.circle(x, y)
+bok.show(p)
