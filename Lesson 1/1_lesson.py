@@ -34,13 +34,28 @@ plt.show()
 #
 #sns.jointplot(x, y)
 
+""" Функция ошибки """
+
+def error(f, x, y):
+    return sp.sum((f(x) - y) ** 2)
 
 """ Строим модель парной линейной регрессии """
 
 reg = sp.polyfit(x, y, deg=1)
-print(reg)
-fl = sp.poly1d(reg)
+f1 = sp.poly1d(reg)
+print(reg, error(f1, x, y))
 fx = sp.linspace(0, x[-1], 1000)
 plt.scatter(x, y, s=10)
-plt.plot(fx, fl(fx), linewidth=4, color="red")
+plt.plot(fx, f1(fx), linewidth=4, color="red")
+plt.show()
+
+
+""" Модель парной квадратичной регрессии """
+
+reg = sp.polyfit(x, y, deg=2)
+f1 = sp.poly1d(reg)
+print(reg, error(f1, x, y))
+fx = sp.linspace(0, x[-1], 1000)
+plt.scatter(x, y, s=10)
+plt.plot(fx, f1(fx), linewidth=4, color="red")
 plt.show()
