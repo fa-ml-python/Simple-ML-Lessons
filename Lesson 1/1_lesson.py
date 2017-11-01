@@ -114,3 +114,18 @@ print(error(f2_, x[train], y[train]))
 print(error(f2_, x[test], y[test]))
 
 plot_models(x, y, [f2_], "test")
+
+
+""" Разбиеные выборки на две подвыборки """
+
+inflection_idx = 550
+xa = x[:inflection_idx]
+ya = y[:inflection_idx]
+xb = x[inflection_idx:]
+yb = y[inflection_idx:]
+
+fa = sp.poly1d(sp.polyfit(xa, ya, 1))
+fb = sp.poly1d(sp.polyfit(xb, yb, 1))
+print(error(fa, xa, ya), error(fb, xb, yb))
+
+plot_models(x, y, [fa, fb], "test")
