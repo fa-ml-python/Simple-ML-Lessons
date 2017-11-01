@@ -59,3 +59,36 @@ fx = sp.linspace(0, x[-1], 1000)
 plt.scatter(x, y, s=10)
 plt.plot(fx, f1(fx), linewidth=4, color="red")
 plt.show()
+
+
+""" Регрессия 3 степени """
+
+reg = sp.polyfit(x, y, deg=3)
+f1 = sp.poly1d(reg)
+print(reg, error(f1, x, y))
+fx = sp.linspace(0, x[-1], 1000)
+plt.scatter(x, y, s=10)
+plt.plot(fx, f1(fx), linewidth=4, color="red")
+plt.show()
+
+
+""" Регрессия 10 степени """
+
+reg = sp.polyfit(x, y, deg=10)
+f1 = sp.poly1d(reg)
+print(error(f1, x, y))
+fx = sp.linspace(0, x[-1], 1000)
+plt.scatter(x, y, s=10)
+plt.plot(fx, f1(fx), linewidth=4, color="red")
+plt.show()
+
+
+""" Регрессия 100 степени """
+
+reg = sp.polyfit(x, y, deg=100)
+f1 = sp.poly1d(reg)
+print(error(f1, x, y))
+fx = sp.linspace(0, x[-1], 1000)
+plt.scatter(x, y, s=10)
+plt.plot(fx, f1(fx), linewidth=4, color="red")
+plt.show()
