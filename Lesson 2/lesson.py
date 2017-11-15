@@ -14,15 +14,22 @@ import matplotlib.pyplot as plt
 dj = pandas.read_csv("data/D&J-IND_101001_171001.txt")
 gasp = pandas.read_csv("data/GAZP_101001_171001.txt")
 
-print(dj.shape, gasp.shape)
+print("Raw data shapes:", dj.shape, gasp.shape)
 
 res = pandas.merge(dj, gasp, on='<DATE>', suffixes=['_DJ', '_GASP'])
 x = res['<CLOSE>_DJ']
 y = res['<CLOSE>_GASP']
 
+print("Initial data")
+plt.scatter(x, y)
+plt.show()
+
+
+minx, maxx, miny, maxy = min(x), max(x), min(y), max(y)
 x = (x - min(x)) / (max(x) - min(x))
 y = (y - min(y)) / (max(y) - min(y))
 
+print("Normalized data with regression")
 plt.scatter(x, y)
 
 
@@ -59,34 +66,26 @@ y_ = hyp.apply(x)
 plt.plot(x, y_, color="red")
 
 J = hyp.error(x, y)
-print(J)
-
-#i = 0
-#steps = []
-#errors = []
-#while(i < 150):
-#    y_ = hyp.apply(x)
-#    dJ0 = sum(y_ - y) / m
-#    dJ1 = sum((y_ - y)*x) / m
-#    
-#    alpha = 0.7
-#    theta0 = hyp.theta[0] - alpha * dJ0
-#    theta1 = hyp.theta[1] - alpha * dJ1
-#    hyp.theta = sp.array([theta0, theta1])
-#    
-#    J = hyp.error(x, y)
-#    
-#    steps.append(i)
-#    errors.append(J)
-#    
-#    i += 1
+print("Initial error", J)
 
 (steps, errors) = hyp.gradient_descent(x, y)
 y_ = hyp.apply(x)
 plt.plot(x, y_, color="green")
 plt.show()
 
-print(errors[-1] - errors[-2])
+print("Final error difference:", errors[-1] - errors[-2])
 
 plt.plot(steps, errors)
+plt.show()
+
+print("Denormalized data with regression")
+x = x * (maxx - minx) + minx
+y = y * (maxy - miny) + miny
+theta1 = hyp.theta[1] * (maxy - miny) / (maxx - minx)
+theta0 = hyp.theta[0] * (maxy - miny) + miny - theta1 * minx
+print(theta0, theta1)
+y__ = theta0 + theta1 * x
+plt.scatter(x, y)
+#plt.plot(x, y_, color="red")
+plt.plot(x, y__, color="green")
 plt.show()
