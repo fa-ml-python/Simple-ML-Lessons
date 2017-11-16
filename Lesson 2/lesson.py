@@ -74,7 +74,7 @@ class hypothesis(object):
         errors = []
         m = len(y)
         while(i < 150):
-            y_ = hyp.apply(x)
+            y_ = self.apply(x)
             dJ0 = sum(y_ - y) / m
             dJ1 = sum((y_ - y)*x) / m
             theta0 = self.theta[0] - alpha * dJ0
@@ -82,7 +82,7 @@ class hypothesis(object):
             self.theta = sp.array([theta0, theta1])
             
             steps.append(i)
-            errors.append(hyp.error(x, y))
+            errors.append(self.error(x, y))
             
             i += 1
         return (steps, errors)
@@ -99,15 +99,17 @@ class hypothesis2(object):
         """ Метод, возвращающий теоретический результат 
         по переданным значениям факторов """
         return sum((self.apply(X1, X2) - Y)**2) / (2 * len(Y))
-    def gradient_descent(self, X1, X2, Y):
+    def gradient_descent(self, X1, X2, Y, test=False, 
+                         x1_test=None, x2_test=None, y_test=None):
         """ Метод, реализующий градиентный спуск """
         i = 0
         m = len(Y)
-        alpha = 0.9
+        alpha = 0.3
         steps = []
         errors = []
+        errors_test = []
         while(i < 100):
-            y_ = hyp.apply(X1, X2)
+            y_ = self.apply(X1, X2)
             dJ0 = sum(y_ - Y) / m
             dJ1 = sum((y_ - Y)*X1) / m
             dJ2 = sum((y_ - Y)*X2) / m
@@ -117,13 +119,21 @@ class hypothesis2(object):
             theta2 = self.theta[2] - alpha * dJ2
             self.theta = sp.array([theta0, theta1, theta2])
             
-            J = hyp.error(X1, X2, Y)
+            J = self.error(X1, X2, Y)
             
             steps.append(i)
             errors.append(J)
             
+            if test:
+                J_test = self.error(x1_test, x2_test, y_test)
+                errors_test.append(J_test)
+            
             i += 1
-        return (steps, errors)
+        if test:
+            return (steps, errors, errors_test)
+        else:
+            return (steps, errors)
+            
 
 """ Заводим и обучаем нашу регрессию """
 hyp = hypothesis2()
@@ -139,6 +149,34 @@ print("Final error:  ", errors[-1])
 print("Final error difference:", errors[-1] - errors[-2])
 
 plt.plot(steps, errors)
+plt.show()
+
+""" Пробуем обучить регрессию на тренировочной выборке из данных """
+  
+def train_test_split(length, frac=0.8):
+    split_idx = int(frac * length)
+    shuffled = sp.random.permutation(list(range(length)))
+    train = sorted(shuffled[:split_idx])
+    test = sorted(shuffled[split_idx:])
+    return (train, test)
+
+hyp2 = hypothesis2()
+
+(train, test) = train_test_split(len(y), frac=0.9)
+
+J = hyp2.error(x1[train], x2[train], y[train])
+print("Initial train error:", J)
+J = hyp2.error(x1[test], x2[test], y[test])
+print("Initial test error:", J)
+
+(steps, errors, errors_test) = hyp2.gradient_descent(x1[train], x2[train], y[train], 
+                                                    test=True,
+                                                    x1_test=x1[test], x2_test=x2[test], y_test=y[test], )
+print("Final train error:  ", errors[-1])
+J = hyp2.error(x1[test], x2[test], y[test])
+print("Final test error:", J)
+plt.plot(steps, errors)
+plt.plot(steps, errors_test, color="purple")
 plt.show()
 
 """ Денормализуем данные и параметры регрессии """
