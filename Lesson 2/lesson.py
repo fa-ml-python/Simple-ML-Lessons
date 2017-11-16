@@ -38,6 +38,30 @@ class hypothesis(object):
         return self.theta[0] + self.theta[1] * X
     def error(self, X, Y):
         return sum((self.apply(X) - Y)**2) / (2 * len(Y))
+    def gradient_descent(self, x, y):
+        i = 0
+        m = len(x)
+        steps = []
+        errors = []
+        while(i < 150):
+            y_ = hyp.apply(x)
+            dJ0 = sum(y_ - y) / m
+            dJ1 = sum((y_ - y)*x) / m
+        #    print(dJ0, dJ1)
+            
+            alpha = 0.3
+            theta0 = self.theta[0] - alpha * dJ0
+            theta1 = self.theta[1] - alpha * dJ1
+            self.theta = sp.array([theta0, theta1])
+        #    print(hyp.theta)
+            
+            J = hyp.error(x, y)
+        #    print(J)
+            
+            steps.append(i)
+            errors.append(J)
+            
+            i += 1
 
 
 hyp = hypothesis()
@@ -48,29 +72,9 @@ plt.plot(x, y_, color="red")
 J = hyp.error(x, y)
 print(J)
 
-i = 0
-steps = []
-errors = []
-while(i < 150):
-    y_ = hyp.apply(x)
-    dJ0 = sum(y_ - y) / m
-    dJ1 = sum((y_ - y)*x) / m
-#    print(dJ0, dJ1)
-    
-    alpha = 0.7
-    theta0 = hyp.theta[0] - alpha * dJ0
-    theta1 = hyp.theta[1] - alpha * dJ1
-    hyp.theta = sp.array([theta0, theta1])
-#    print(hyp.theta)
-    
-    J = hyp.error(x, y)
-#    print(J)
-    
-    steps.append(i)
-    errors.append(J)
-    
-    i += 1
+hyp.gradient_descent(x, y)
 
+y_ = hyp.apply(x)
 plt.plot(x, y_, color="green")
 plt.show()
 
