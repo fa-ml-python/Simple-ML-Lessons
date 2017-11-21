@@ -90,17 +90,20 @@ class hypothesis(object):
 # TODO реализовать универсальный класс для множественной регресии
 
 class hypothesis2(object):
-    def __init__(self):
+    def __init__(self, n=2):
         """ Параметры регрессии """
-        self.theta = sp.array([0, 0, 0])
-    def apply(self, X1, X2):
-        return self.theta[0] + self.theta[1] * X1 + self.theta[2] * X2
-    def error(self, X1, X2, Y):
+        self.theta = [0] * (n+1)
+    def apply(self, X):
+        res = self.theta[0]
+        for i in range(len(X)):
+            res += self.theta[i+1] * X[i]
+        return res
+    def error(self, X, Y):
         """ Метод, возвращающий теоретический результат 
         по переданным значениям факторов """
-        return sum((self.apply(X1, X2) - Y)**2) / (2 * len(Y))
-    def gradient_descent(self, X1, X2, Y, test=False, 
-                         x1_test=None, x2_test=None, y_test=None):
+        return sum((self.apply(X) - Y)**2) / (2 * len(Y))
+    def gradient_descent(self, X, Y, test=False, 
+                         x_test=None, y_test=None):
         """ Метод, реализующий градиентный спуск """
         i = 0
         m = len(Y)
@@ -108,24 +111,21 @@ class hypothesis2(object):
         steps = []
         errors = []
         errors_test = []
-        while(i < 100):
-            y_ = self.apply(X1, X2)
-            dJ0 = sum(y_ - Y) / m
-            dJ1 = sum((y_ - Y)*X1) / m
-            dJ2 = sum((y_ - Y)*X2) / m
+        while(i < 200):
+            y_ = self.apply(X)
     
-            theta0 = self.theta[0] - alpha * dJ0
-            theta1 = self.theta[1] - alpha * dJ1
-            theta2 = self.theta[2] - alpha * dJ2
-            self.theta = sp.array([theta0, theta1, theta2])
+            self.theta[0] = self.theta[0] - alpha * sum(y_ - Y) / m
             
-            J = self.error(X1, X2, Y)
+            for j in range(len(X)):
+                self.theta[j+1] = self.theta[j+1] - alpha * sum((y_ - Y)*X[j]) / m
+            
+            J = self.error(X, Y)
             
             steps.append(i)
             errors.append(J)
             
             if test:
-                J_test = self.error(x1_test, x2_test, y_test)
+                J_test = self.error(x_test, y_test)
                 errors_test.append(J_test)
             
             i += 1
@@ -138,10 +138,10 @@ class hypothesis2(object):
 """ Заводим и обучаем нашу регрессию """
 hyp = hypothesis2()
 
-J = hyp.error(x1, x2, y)
+J = hyp.error([x1, x2], y)
 print("Initial error:", J)
 
-(steps, errors) = hyp.gradient_descent(x1, x2, y)
+(steps, errors) = hyp.gradient_descent([x1, x2], y)
 #plt.plot(x, y_, color="green")
 #plt.show()
 
@@ -153,7 +153,7 @@ plt.show()
 
 """ Пробуем обучить регрессию на тренировочной выборке из данных """
   
-def train_test_split(length, frac=0.8):
+def train_test_split(length, frac=0.9):
     split_idx = int(frac * length)
     shuffled = sp.random.permutation(list(range(length)))
     train = sorted(shuffled[:split_idx])
@@ -162,36 +162,36 @@ def train_test_split(length, frac=0.8):
 
 hyp2 = hypothesis2()
 
-(train, test) = train_test_split(len(y), frac=0.9)
+(train, test) = train_test_split(len(y), frac=0.8)
 
-J = hyp2.error(x1[train], x2[train], y[train])
+J = hyp2.error((x1[train], x2[train]), y[train])
 print("Initial train error:", J)
-J = hyp2.error(x1[test], x2[test], y[test])
+J = hyp2.error((x1[test], x2[test]), y[test])
 print("Initial test error:", J)
 
-(steps, errors, errors_test) = hyp2.gradient_descent(x1[train], x2[train], y[train], 
+(steps, errors, errors_test) = hyp2.gradient_descent((x1[train], x2[train]), y[train], 
                                                     test=True,
-                                                    x1_test=x1[test], x2_test=x2[test], y_test=y[test], )
+                                                    x_test=(x1[test], x2[test]), y_test=y[test])
 print("Final train error:  ", errors[-1])
-J = hyp2.error(x1[test], x2[test], y[test])
+J = hyp2.error((x1[test], x2[test]), y[test])
 print("Final test error:", J)
 plt.plot(steps, errors)
 plt.plot(steps, errors_test, color="purple")
 plt.show()
 
-""" Денормализуем данные и параметры регрессии """
-#print("Denormalized data with regression")
-x1 = x1 * (x1max - x1min) + x1min
-x2 = x2 * (x2max - x2min) + x2min
-y = y * (ymax - ymin) + ymin
-#plt.scatter(x, y)
-
-theta1 = hyp.theta[1] * (ymax-ymin) / (x1max - x1min)
-theta2 = hyp.theta[2] * (ymax-ymin) / (x2max - x2min)
-theta0 = hyp.theta[0] * (ymax - ymin) + ymin - theta1*x1min - theta2*x1min
-hyp.theta = sp.array([theta0, theta1, theta2])
-J = hyp.error(x1, x2, y)
-print("Denormalized data error", J)
-#y_ = hyp.apply(x)
-#plt.plot(x, y_, color="red")
-#plt.show()
+#""" Денормализуем данные и параметры регрессии """
+##print("Denormalized data with regression")
+#x1 = x1 * (x1max - x1min) + x1min
+#x2 = x2 * (x2max - x2min) + x2min
+#y = y * (ymax - ymin) + ymin
+##plt.scatter(x, y)
+#
+#theta1 = hyp.theta[1] * (ymax-ymin) / (x1max - x1min)
+#theta2 = hyp.theta[2] * (ymax-ymin) / (x2max - x2min)
+#theta0 = hyp.theta[0] * (ymax - ymin) + ymin - theta1*x1min - theta2*x1min
+#hyp.theta = sp.array([theta0, theta1, theta2])
+#J = hyp.error((x1, x2), y)
+#print("Denormalized data error", J)
+##y_ = hyp.apply(x)
+##plt.plot(x, y_, color="red")
+##plt.show()
