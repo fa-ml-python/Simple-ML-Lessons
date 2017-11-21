@@ -14,3 +14,4 @@ data = load_iris()
 
 X = sp.array(data.data).transpose()
 Y = sp.array(data.target)
+
