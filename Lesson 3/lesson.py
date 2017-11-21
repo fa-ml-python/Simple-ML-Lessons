@@ -12,6 +12,16 @@ from sklearn.datasets import load_iris
 
 data = load_iris()
 
-X = sp.array(data.data).transpose()
-Y = sp.array(data.target)
+raw_features = sp.array(data.data).transpose()
+raw_label = sp.array(data.target)
 
+
+X = []
+for feature in raw_features:
+    feature = (feature - min(feature)) / (max(feature) - min(feature))
+    X.append(feature)
+X = sp.array(X)
+
+Y = raw_label.copy()
+Y[Y!=2] = 0
+Y[Y==2] = 1
