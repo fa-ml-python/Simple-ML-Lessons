@@ -75,8 +75,6 @@ class hypothesis2(object):
 """ Заводим и обучаем нашу регрессию """
 hyp = hypothesis2(n=4)
 
-y_ = hyp.apply(X)
-
 J = hyp.error(X, Y)
 print("Initial error:", J)
 
@@ -85,7 +83,6 @@ print("Initial error:", J)
 #plt.show()
 
 print("Final error:  ", errors[-1])
-print("Final error difference:", errors[-1] - errors[-2])
 
 plt.plot(steps, errors)
 plt.show()
@@ -110,10 +107,10 @@ J = hyp2.error(X[:, test], Y[test])
 print("Initial test error:", J)
 
 (steps, errors, errors_test) = hyp2.gradient_descent(X[:, train], Y[train], 
-                                                    test=True, n_steps=10000,
+                                                    test=True, n_steps=2000,
                                                     x_test=X[:, test], y_test=Y[test])
 print("Final train error:  ", errors[-1])
-J = hyp2.error((x1[test], x2[test]), y[test])
+J = hyp2.error(X[:, test], Y[test])
 print("Final test error:", J)
 plt.plot(steps, errors)
 plt.plot(steps, errors_test, color="purple")
