@@ -24,8 +24,8 @@ model.add(Dense(1, activation='sigmoid'))
 # Compile model
 model.compile(loss='binary_crossentropy', optimizer='Nadam', metrics=['accuracy'])
 # Fit the model
-model.fit(X, Y, epochs=1000, batch_size=50)
+model.fit(X, Y, epochs=1000, batch_size=200)
 # evaluate the model
 scores = model.evaluate(X, Y)
 print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
-''' 90.89% '''
+''' 99.48% '''
