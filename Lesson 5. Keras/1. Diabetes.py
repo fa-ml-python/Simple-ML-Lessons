@@ -17,10 +17,10 @@ model.add(Dense(8, input_dim=8, activation='sigmoid'))
 #model.add(Dense(8, activation='relu'))
 model.add(Dense(1, activation='sigmoid'))
 # Compile model
-model.compile(loss='mean_squared_logarithmic_error', optimizer='Nadam', metrics=['accuracy'])
+model.compile(loss='binary_crossentropy', optimizer='Nadam', metrics=['accuracy'])
 # Fit the model
 model.fit(X, Y, epochs=150, batch_size=10)
 # evaluate the model
 scores = model.evaluate(X, Y)
 print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
-''' 73.05% '''
+''' 73.31% '''
